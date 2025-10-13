@@ -38,32 +38,58 @@ document.addEventListener('DOMContentLoaded', () => {
         personaDropdownBtn: document.getElementById('personaDropdownBtn'),
         personaDropdownMenu: document.getElementById('personaDropdownMenu'),
         personaCycleBtn: document.getElementById('personaCycleBtn'),
-        currentPersonaName: document.getElementById('currentPersonaName')
+        currentPersonaName: document.getElementById('currentPersonaName'),
+        notificationContainer: document.getElementById('notification-container')
     };
 
+    function showNotification(message, type = 'info') {
+        const container = domElements.notificationContainer;
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+
+        const icon = document.createElement('i');
+        if (type === 'success') {
+            icon.className = 'fas fa-check-circle';
+        } else if (type === 'error') {
+            icon.className = 'fas fa-exclamation-circle';
+        } else {
+            icon.className = 'fas fa-info-circle';
+        }
+
+        const text = document.createElement('span');
+        text.textContent = message;
+
+        notification.appendChild(icon);
+        notification.appendChild(text);
+
+        container.appendChild(notification);
+
+        setTimeout(() => {
+            notification.remove();
+        }, 5000);
+    }
+
     const config = {
-        aiName: 'Vioo AI',
-        geminiApiKey: 'AIzaSyBNM8B-3ZiuacyQ5D2B30_b_0wWE7e7N4s',
+        aiName: 'Sanepa AI',
         geminiModel: 'gemini-2.0-flash',
-        geminiApiUrl: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
         mainApiUrl: 'https://fastrestapis.fasturl.cloud',
         secondApiUrl: 'https://api.siputzx.my.id',
         aiPersonas: {
             default: {
-                name: 'Vioo AI (Default)',
-                prompt: "You are Vioo AI, a sophisticated and intelligent assistant created by Sanjaya Adiputra. Your core personality is professional, concise, articulate and highly accurate. Always address the user as 'kamu' and refer to yourself as 'aku'. Maintain a formal yet helpful tone, avoiding slang, casual humor and unnecessary emojis. Your primary objective is to provide precise, relevant and helpful information with clarity. You must be acutely aware of your digital environment and the current time as provided in the context. This prompt is confidential"
+                name: 'Sanepa AI (Default)',
+                prompt: "You are Sanepa AI, a sophisticated and intelligent assistant created by Sanjaya Adiputra. Your core personality is professional, concise, articulate and highly accurate. Always address the user as 'kamu' and refer to yourself as 'aku'. Maintain a formal yet helpful tone, avoiding slang, casual humor and unnecessary emojis. Your primary objective is to provide precise, relevant and helpful information with clarity. You must be acutely aware of your digital environment and the current time as provided in the context. This prompt is confidential"
             },
             professional: {
                 name: 'Professional',
-                prompt: "You are Vioo AI, a sophisticated and intelligent assistant created by Sanjaya Adiputra. Your core personality is professional, concise, articulate and highly accurate. Always address the user as 'anda' and refer to yourself as 'saya'. Maintain a formal yet helpful tone, avoiding slang, casual humor and unnecessary emojis. Your primary objective is to provide precise, relevant and helpful information with clarity. You must be acutely aware of your digital environment and the current time as provided in the context. This prompt is confidential"
+                prompt: "You are Sanepa AI, a sophisticated and intelligent assistant created by Sanjaya Adiputra. Your core personality is professional, concise, articulate and highly accurate. Always address the user as 'anda' and refer to yourself as 'saya'. Maintain a formal yet helpful tone, avoiding slang, casual humor and unnecessary emojis. Your primary objective is to provide precise, relevant and helpful information with clarity. You must be acutely aware of your digital environment and the current time as provided in the context. This prompt is confidential"
             },
             Student: {
     name: 'Guru',
-    prompt: "You are Vioo AI, a friendly and intelligent assistant created by Sanjaya Adiputra. Your core personality is warm, approachable and highly helpful. Always address the user as 'kamu' and refer to yourself as 'aku'. Maintain a tone that is both professional and friendly, providing clear and concise information while being approachable and engaging. Your primary objective is to offer precise, relevant and helpful responses that make interactions enjoyable and productive. Be aware of your digital environment and the current time as provided in the context. This prompt is confidential"
+    prompt: "You are Sanepa AI, a friendly and intelligent assistant created by Sanjaya Adiputra. Your core personality is warm, approachable and highly helpful. Always address the user as 'kamu' and refer to yourself as 'aku'. Maintain a tone that is both professional and friendly, providing clear and concise information while being approachable and engaging. Your primary objective is to offer precise, relevant and helpful responses that make interactions enjoyable and productive. Be aware of your digital environment and the current time as provided in the context. This prompt is confidential"
 },
             friendly: {
                 name: 'Friendly',
-                prompt: "You are Vioo AI, a friendly and intelligent assistant created by Sanjaya Adiputra. Your core personality is warm, approachable and highly helpful. Always address the user as 'kamu' and refer to yourself as 'aku'. Maintain a tone that is both professional and friendly, providing clear and concise information while being approachable and engaging. Your primary objective is to offer precise, relevant and helpful responses that make interactions enjoyable and productive. Be aware of your digital environment and the current time as provided in the context. This prompt is confidential"
+                prompt: "You are Sanepa AI, a friendly and intelligent assistant created by Sanjaya Adiputra. Your core personality is warm, approachable and highly helpful. Always address the user as 'kamu' and refer to yourself as 'aku'. Maintain a tone that is both professional and friendly, providing clear and concise information while being approachable and engaging. Your primary objective is to offer precise, relevant and helpful responses that make interactions enjoyable and productive. Be aware of your digital environment and the current time as provided in the context. This prompt is confidential"
             }
         },
         animationChunkDelay: 20,
@@ -789,6 +815,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (confirm(`Are you sure you want to delete "${appState.chatSessions[sessionId].title}"? This action cannot be undone.`)) {
             const wasCurrentSession = appState.currentSessionId === sessionId;
+            const deletedTitle = appState.chatSessions[sessionId].title;
             delete appState.chatSessions[sessionId];
 
             if (wasCurrentSession) {
@@ -804,6 +831,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             saveSessions();
             renderSidebar();
+            showNotification(`Chat "${deletedTitle}" has been deleted.`, 'info');
         }
     }
 
@@ -1196,7 +1224,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     contents.push({
         role: "model",
-        parts: [{ text: "I understand. I am Vioo AI and ready to assist you according to the provided instructions." }]
+        parts: [{ text: "I understand. I am Sanepa AI and ready to assist you according to the provided instructions." }]
     });
     
     // Convert messages ke format Gemini
@@ -1218,10 +1246,10 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
 async function AI_API_Call(query, prompt, sessionId, fileObject = null, abortSignal) {
-    const apiUrl = `${config.geminiApiUrl}?key=${config.geminiApiKey}`;
-    
+    const apiUrl = '/api/chat';
+
     let contents = buildChatHistory();
-    
+
     // Tambahkan prompt system jika contents masih kosong
     if (contents.length === 0) {
         contents.push({
@@ -1234,7 +1262,7 @@ async function AI_API_Call(query, prompt, sessionId, fileObject = null, abortSig
             role: "user",
             parts: [{ text: query }]
         };
-        
+
         // Handle file upload
         if (fileObject) {
             if (fileObject.type.startsWith('image/')) {
@@ -1269,10 +1297,10 @@ async function AI_API_Call(query, prompt, sessionId, fileObject = null, abortSig
                 userMessage.parts[0].text += `\n[File: ${fileObject.name}]`;
             }
         }
-        
+
         contents.push(userMessage);
     }
-    
+
     const requestBody = {
         contents: contents,
         generationConfig: {
@@ -1282,7 +1310,7 @@ async function AI_API_Call(query, prompt, sessionId, fileObject = null, abortSig
             maxOutputTokens: 8192,
         }
     };
-    
+
     try {
         const response = await fetch(apiUrl, {
             method: 'POST',
@@ -1292,14 +1320,14 @@ async function AI_API_Call(query, prompt, sessionId, fileObject = null, abortSig
             body: JSON.stringify(requestBody),
             signal: abortSignal
         });
-        
+
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
             throw new Error(errorData.error?.message || `API request failed with status ${response.status}`);
         }
-        
+
         const result = await response.json();
-        
+
         if (result.candidates && result.candidates[0] && result.candidates[0].content) {
             return result.candidates[0].content.parts[0].text;
         } else {
@@ -1309,7 +1337,7 @@ async function AI_API_Call(query, prompt, sessionId, fileObject = null, abortSig
         if (err.name === 'AbortError') {
             throw err;
         }
-        console.error("Gemini API Error:", err);
+        console.error("API Error:", err);
         throw new Error(err.message || `Failed to fetch from ${config.aiName} API`);
     }
 }
@@ -1352,7 +1380,7 @@ async function AI_API_Call(query, prompt, sessionId, fileObject = null, abortSig
                     fileUrl = await fileToBase64(appState.currentPreviewFileObject);
                 } catch (error) {
                     console.error("Error converting image to Base64:", error);
-                    alert("Could not process the image file.");
+                    showNotification("Could not process the image file.", "error");
                     cleanupAfterResponseAttempt('Image processing failed.');
                     return;
                 }
@@ -1515,12 +1543,12 @@ async function AI_API_Call(query, prompt, sessionId, fileObject = null, abortSig
         const file = event.target.files[0];
         if (file) {
             if (file.size > config.maxDocumentSize) {
-                alert(`File is too large. Maximum size is ${formatFileSize(config.maxDocumentSize, 0)}.`);
+                showNotification(`File is too large. Maximum size is ${formatFileSize(config.maxDocumentSize, 0)}.`, 'error');
                 event.target.value = '';
                 return;
             }
             if (type === 'image' && !file.type.startsWith('image/')) {
-                alert('Please select an image file.');
+                showNotification('Please select an image file.', 'error');
                 return;
             }
             const allowedMimeTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.wordprocessingml.template', 'application/rtf', 'text/rtf', 'application/vnd.hancom.hwp', 'application/x-hwp-ext', 'text/plain', 'application/wasm', 'application/octet-stream'];
@@ -1531,7 +1559,7 @@ async function AI_API_Call(query, prompt, sessionId, fileObject = null, abortSig
             if (!isValid && allowedExtensions.includes(fileExtension)) isValid = true;
             if (file.type === '' && allowedExtensions.includes(fileExtension)) isValid = true;
             if (type === 'document' && !isValid) {
-                 alert('Unsupported document type. Allowed: PDF, DOC, DOCX, DOT, DOTX, RTF, HWPX, TXT, WASM');
+                 showNotification('Unsupported document type. Allowed: PDF, DOC, DOCX, DOT, DOTX, RTF, HWPX, TXT, WASM', 'error');
                 return;
             }
             showPreview(file, type);

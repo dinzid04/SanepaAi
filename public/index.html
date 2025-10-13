@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vioo AI</title>
-    <meta property="og:title" content="Vioo-AI">
-    <meta property="og:description" content="Chat with Vioo AI to make your work easier and more">
+    <title>Sanepa AI</title>
+    <meta property="og:title" content="Sanepa-AI">
+    <meta property="og:description" content="Chat with Sanepa AI to make your work easier and more">
     <meta property="og:image" content="https://files.catbox.moe/70gv96.png">
     <meta property="og:url" content="https://files.catbox.moe/70gv96.png">
     <link rel="icon" href="https://files.catbox.moe/70gv96.png" type="image/jpeg">
@@ -18,66 +18,78 @@
     <style>
         :root {
             --bg-color-light: #ffffff;
-            --text-color-light: #121212;
-            --primary-color-light: #cc9900;
-            --secondary-color-light: #f0f0f0;
-            --border-color-light: #e0e0e0;
-            --header-bg-light: #f8f9fa;
-            --input-bg-light: #ffffff;
-            --input-focus-border-light: #cc9900;
+            --text-color-light: #181818;
+            --primary-color-light: #005cbb;
+            --secondary-color-light: #f1f3f5;
+            --border-color-light: #dee2e6;
+            --header-bg-light: #ffffff;
+            --input-bg-light: #f8f9fa;
+            --input-focus-border-light: #005cbb;
             --button-hover-bg-light: #e9ecef;
-            --message-user-bg-light: #e9ecef;
-            --message-user-text-light: #121212;
-            --message-bot-bg-light: transparent;
-            --message-bot-text-light: #121212;
+            --message-user-bg-light: #005cbb;
+            --message-user-text-light: #ffffff;
+            --message-bot-bg-light: #f1f3f5;
+            --message-bot-text-light: #181818;
             --code-header-bg-light: #e9ecef;
-            --code-lang-text-light: #555;
-            --link-color-light: #0056b3;
+            --code-lang-text-light: #495057;
+            --link-color-light: #005cbb;
             --placeholder-color-light: #6c757d;
             --menu-bg-light: #ffffff;
-            --menu-hover-bg-light: #f0f0f0;
-            --scrollbar-thumb-light: #cccccc;
-            --scrollbar-track-light: #f0f0f0;
-            --prism-bg-light: #ffffff; 
-            --prism-text-light: #393A34;
-            --sidebar-bg-light: #f9f9f9;
-            --sidebar-text-light: #202123;
-            --sidebar-hover-light: #e7e7e8;
-            --date-separator-bg-light: #e1f3fb;
-            --date-separator-text-light: #536471;
-            --info-message-bg-light: #fef1e0;
-            --info-message-text-light: #8d7254;
+            --menu-hover-bg-light: #f1f3f5;
+            --scrollbar-thumb-light: #ced4da;
+            --scrollbar-track-light: #f1f3f5;
+            --prism-bg-light: #f8f9fa;
+            --prism-text-light: #212529;
+            --sidebar-bg-light: #f8f9fa;
+            --sidebar-text-light: #212529;
+            --sidebar-hover-light: #e9ecef;
+            --date-separator-bg-light: #e9ecef;
+            --date-separator-text-light: #495057;
+            --info-message-bg-light: #e7f5ff;
+            --info-message-text-light: #005cbb;
+            --notification-success-bg-light: #d1e7dd;
+            --notification-success-text-light: #0f5132;
+            --notification-error-bg-light: #f8d7da;
+            --notification-error-text-light: #842029;
+            --notification-info-bg-light: #cff4fc;
+            --notification-info-text-light: #055160;
 
-            --bg-color-dark: #121212;
-            --text-color-dark: #e0e0e0;
-            --primary-color-dark: #ffc300;
-            --secondary-color-dark: #1e1e1e;
-            --border-color-dark: #3a3a3a;
-            --header-bg-dark: #1f1f1f;
-            --input-bg-dark: #2c2c2c;
-            --input-focus-border-dark: #ffc300;
+            --bg-color-dark: #1a1a1a;
+            --text-color-dark: #f0f0f0;
+            --primary-color-dark: #409cff;
+            --secondary-color-dark: #2c2c2c;
+            --border-color-dark: #444444;
+            --header-bg-dark: #222222;
+            --input-bg-dark: #333333;
+            --input-focus-border-dark: #409cff;
             --button-hover-bg-dark: #3a3a3a;
-            --message-user-bg-dark: #2c2c2c;
+            --message-user-bg-dark: #409cff;
             --message-user-text-dark: #ffffff;
-            --message-bot-bg-dark: transparent;
-            --message-bot-text-dark: #e0e0e0;
+            --message-bot-bg-dark: #2c2c2c;
+            --message-bot-text-dark: #f0f0f0;
             --code-header-bg-dark: #383838;
-            --code-lang-text-dark: #ccc;
-            --link-color-dark: #3b9eff;
+            --code-lang-text-dark: #ced4da;
+            --link-color-dark: #409cff;
             --placeholder-color-dark: #888888;
             --menu-bg-dark: #2c2c2c;
             --menu-hover-bg-dark: #3a3a3a;
             --scrollbar-thumb-dark: #555555;
-            --scrollbar-track-dark: #1e1e1e;
-            --prism-bg-dark: #121212; 
-            --prism-text-dark: #f8f8f2; 
-            --sidebar-bg-dark: #202123;
+            --scrollbar-track-dark: #2c2c2c;
+            --prism-bg-dark: #212529;
+            --prism-text-dark: #f8f8f2;
+            --sidebar-bg-dark: #222222;
             --sidebar-text-dark: #ececf1;
             --sidebar-hover-dark: #343541;
             --date-separator-bg-dark: #2c3a42;
             --date-separator-text-dark: #b0c8d5;
-            --info-message-bg-dark: #2a2723;
-            --info-message-text-dark: #c8b8a5;
+            --info-message-bg-dark: #1c3c5c;
+            --info-message-text-dark: #aed6f1;
+            --notification-success-bg-dark: #0f5132;
+            --notification-success-text-dark: #d1e7dd;
+            --notification-error-bg-dark: #842029;
+            --notification-error-text-dark: #f8d7da;
+            --notification-info-bg-dark: #055160;
+            --notification-info-text-dark: #cff4fc;
         }
         body {
             font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -432,24 +444,25 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.75rem 1.5rem;
+            padding: 1rem 2rem;
             background-color: var(--header-bg);
             border-bottom: 1px solid var(--border-color);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
             transition: background-color 0.3s, border-color 0.3s;
             flex-shrink: 0;
+            height: 75px;
         }
         .app-header .logo {
             position: absolute;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            font-size: 1.5rem;
-            font-weight: 600;
+            font-size: 1.8rem;
+            font-weight: 700;
             color: var(--primary-color);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
         #personaDropdownBtn {
             background: none;
@@ -605,10 +618,10 @@
             max-width: 100%; 
         }
         .message-bubble {
-            font-size: 0.95rem;
-            padding: 0.75rem 1rem;
-            border-radius: 18px;
-            line-height: 1.5;
+            font-size: 1.05rem;
+            padding: 0.85rem 1.2rem;
+            border-radius: 20px;
+            line-height: 1.6;
             word-wrap: break-word;
             position: relative;
             background-color: var(--message-bot-bg); 
@@ -909,23 +922,27 @@
         }
         .chat-input-wrapper {
             flex-grow: 1; position: relative; display: flex; align-items: flex-end;
-            border: 1px solid var(--border-color); border-radius: 20px;
+            border: 1.5px solid var(--border-color); border-radius: 24px;
             background-color: var(--input-bg);
-            transition: border-color 0.3s, background-color 0.3s;
+            transition: border-color 0.3s, background-color 0.3s, box-shadow 0.3s;
             padding: 0;
             position: relative;
         }
+        .chat-input-wrapper:focus-within {
+            border-color: var(--input-focus-border);
+            box-shadow: 0 0 0 3px rgba(var(--input-focus-border-rgb), 0.2);
+        }
         .chat-input-wrapper:focus-within { border-color: var(--input-focus-border); }
         #chatInput {
-            flex-grow: 1; padding: 0.75rem 4.8rem 0.75rem 1rem;
-            border: none; border-radius: 20px;
+            flex-grow: 1; padding: 0.9rem 5rem 0.9rem 1.2rem;
+            border: none; border-radius: 24px;
             font-family: inherit;
-            font-size: 1rem; outline: none; background-color: transparent;
+            font-size: 1.1rem; outline: none; background-color: transparent;
             color: var(--text-color);
             resize: none;
             overflow-y: hidden;
-            line-height: 1.5;
-            max-height: 150px; 
+            line-height: 1.6;
+            max-height: 200px;
             box-sizing: border-box;
             white-space: pre-wrap;
             word-wrap: break-word;
@@ -1134,6 +1151,56 @@
         #focusModeTextarea:focus {
             border-color: var(--primary-color);
         }
+        #notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .notification {
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transform: translateX(100%);
+            animation: slideIn 0.5s forwards, fadeOut 0.5s 4.5s forwards;
+        }
+        .notification.success {
+            background-color: var(--notification-success-bg);
+            color: var(--notification-success-text);
+        }
+        .notification.error {
+            background-color: var(--notification-error-bg);
+            color: var(--notification-error-text);
+        }
+        .notification.info {
+            background-color: var(--notification-info-bg);
+            color: var(--notification-info-text);
+        }
+        .notification i {
+            font-size: 1.2rem;
+        }
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+        }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .message-delete-animation { animation: fadeOut 0.5s forwards; }
         @keyframes fadeOut { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.9); } }
@@ -1295,7 +1362,7 @@
                 <i class="fas fa-stream"></i>
             </button>
             <div class="logo">
-                <span>Vioo AI</span>
+                <span>Sanepa AI</span>
                 <button id="personaDropdownBtn" title="Change AI Persona">
                     <i class="fas fa-chevron-down"></i>
                 </button>
@@ -1312,8 +1379,8 @@
         </header>
 
         <div class="initial-view" id="initialView">
-            <img src="https://files.catbox.moe/70gv96.png" alt="Vioo AI">
-            <h1>Hi, I'm <span>Vioo AI</span></h1>
+            <img src="https://files.catbox.moe/70gv96.png" alt="Sanepa AI">
+            <h1>Hi, I'm <span>Sanepa AI</span></h1>
             <p id="statusText">Your smart conversation partner. How can I help you today?</p>
             <div id="placeholderSuggestions" class="placeholder-suggestions"></div>
         </div>
@@ -1340,7 +1407,7 @@
                 </div>
                 <button id="sendBtn" title="Send Message"><i class="fas fa-paper-plane"></i></button>
             </footer>
-            <p class="disclaimer-message">Vioo AI can make mistakes, so double check its responses</p>
+            <p class="disclaimer-message">Sanepa AI can make mistakes, so double check its responses</p>
         </div>
     </div>
     
@@ -1350,6 +1417,8 @@
     </div>
     
     <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+    <div id="notification-container"></div>
 
     <input type="file" id="imageUpload" accept="image/*" class="hidden">
     <input type="file" id="documentUpload" accept=".pdf,.doc,.docx,.dot,.dotx,.rtf,.hwpx,.txt,.wasm" class="hidden">
