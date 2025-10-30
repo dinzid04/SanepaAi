@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vioo AI</title>
-    <meta property="og:title" content="Vioo-AI">
-    <meta property="og:description" content="Chat with Vioo AI to make your work easier and more">
+    <title>Dinz Assistance</title>
+    <meta property="og:title" content="Dinz Assistance">
+    <meta property="og:description" content="Chat with Dinz Assistance to make your work easier and more">
     <meta property="og:image" content="https://files.catbox.moe/70gv96.png">
     <meta property="og:url" content="https://files.catbox.moe/70gv96.png">
     <link rel="icon" href="https://files.catbox.moe/70gv96.png" type="image/jpeg">
@@ -901,86 +901,107 @@
             position: relative;
             flex-shrink: 0;
             background-color: var(--header-bg);
+            padding: 0 1.5rem;
+        }
+        .chat-mode-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.5rem 0;
+        }
+        .chat-mode-selector button {
+            background-color: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 18px;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+        }
+        .chat-mode-selector button:hover {
+            background-color: var(--button-hover-bg);
+        }
+        .chat-mode-selector button#commandPaletteBtn {
+            padding: 0.4rem;
+             width: 36px;
+            height: 36px;
+            justify-content: center;
+        }
+        .chat-mode-selector button#searchModeBtn.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        body.dark-mode .chat-mode-selector button#searchModeBtn.active {
+            background-color: #0056b3;
+            border-color: #0056b3;
         }
         .input-area {
-            display: flex; align-items: flex-end; padding: 1rem 1.5rem;
-            border-top: 1px solid var(--border-color);
-            transition: background-color 0.3s, border-color 0.3s;
+            display: flex;
+            align-items: flex-end;
+            padding-bottom: 1rem;
         }
         .chat-input-wrapper {
-            flex-grow: 1; position: relative; display: flex; align-items: flex-end;
-            border: 1px solid var(--border-color); border-radius: 20px;
+            flex-grow: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
             background-color: var(--input-bg);
             transition: border-color 0.3s, background-color 0.3s;
-            padding: 0;
-            position: relative;
+            padding: 0.25rem 0.5rem;
         }
-        .chat-input-wrapper:focus-within { border-color: var(--input-focus-border); }
+        .chat-input-wrapper:focus-within {
+            border-color: var(--input-focus-border);
+        }
         #chatInput {
-            flex-grow: 1; padding: 0.75rem 4.8rem 0.75rem 1rem;
-            border: none; border-radius: 20px;
+            flex-grow: 1;
+            padding: 0.5rem;
+            border: none;
             font-family: inherit;
-            font-size: 1rem; outline: none; background-color: transparent;
+            font-size: 1rem;
+            outline: none;
+            background-color: transparent;
             color: var(--text-color);
             resize: none;
-            overflow-y: hidden;
             line-height: 1.5;
-            max-height: 150px; 
+            max-height: 150px;
             box-sizing: border-box;
             white-space: pre-wrap;
             word-wrap: break-word;
         }
         #chatInput::placeholder { color: var(--placeholder-color); }
-        #focusModeBtn {
-            position: absolute;
-            top: 12px;
-            right: 10.8px;
+        .chat-input-wrapper button {
             background: none;
             border: none;
             color: var(--placeholder-color);
-            font-size: 1rem;
+            font-size: 1.2rem;
             cursor: pointer;
-            padding: 0.25rem;
+            padding: 0.4rem;
             border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
+            flex-shrink: 0;
+            transition: color 0.2s;
         }
-        #focusModeBtn:hover {
+        .chat-input-wrapper button:hover {
             color: var(--primary-color);
         }
-        #uploadDocumentBtnInside {
-            position: absolute; 
-            right: 0.5rem; 
-            bottom: 0.4rem;
-            background: none; border: none; color: var(--placeholder-color);
-            font-size: 1.2rem; cursor: pointer; padding: 0.4rem; border-radius: 50%;
+        .chat-input-wrapper button#sendBtn {
+            color: var(--primary-color);
         }
-        #uploadDocumentBtnInside:hover { color: var(--primary-color); }
-        .input-area > button { 
-            background: none; border: none; color: var(--primary-color);
-            font-size: 1.3rem; cursor: pointer; margin-left: 0.75rem;
-            padding: 0.5rem; border-radius: 50%;
-            transition: background-color 0.2s, color 0.2s;
-            align-self: flex-end; 
-            margin-bottom: 0.15rem; 
-        }
-        .input-area > button:first-child { margin-left: 0; margin-right: 0.75rem; }
-        .input-area > button:hover { background-color: var(--button-hover-bg); }
-        .input-area > button:disabled:not(.stop-button) {
-            color: var(--placeholder-color); cursor: not-allowed;
-        }
-        .input-area > button:disabled:not(.stop-button):hover { background-color: transparent; }
-        .input-area > button.stop-button { color: #dc3545; } 
-        body.dark-mode .input-area > button.stop-button { color: #ff6b81; }
-        .disclaimer-message {
-            text-align: center;
-            font-size: 0.8rem;
+        .chat-input-wrapper button#sendBtn:disabled:not(.stop-button) {
             color: var(--placeholder-color);
-            padding: 0 1.5rem 0.8rem;
-            margin-top: 0.1rem;
-            margin-bottom: 0.1rem;
+            cursor: not-allowed;
+        }
+        .chat-input-wrapper button#sendBtn.stop-button {
+             color: #dc3545;
+        }
+        body.dark-mode .chat-input-wrapper button#sendBtn.stop-button {
+            color: #ff6b81;
         }
         .preview-container {
             padding: 0.75rem 1.5rem; background-color: var(--secondary-color);
@@ -1295,7 +1316,7 @@
                 <i class="fas fa-stream"></i>
             </button>
             <div class="logo">
-                <span>Vioo AI</span>
+                <span>Dinz Assistance</span>
                 <button id="personaDropdownBtn" title="Change AI Persona">
                     <i class="fas fa-chevron-down"></i>
                 </button>
@@ -1312,8 +1333,8 @@
         </header>
 
         <div class="initial-view" id="initialView">
-            <img src="https://files.catbox.moe/70gv96.png" alt="Vioo AI">
-            <h1>Hi, I'm <span>Vioo AI</span></h1>
+            <img src="https://files.catbox.moe/70gv96.png" alt="Dinz Assistance">
+            <h1>Hi, I'm <span>Dinz Assistance</span></h1>
             <p id="statusText">Your smart conversation partner. How can I help you today?</p>
             <div id="placeholderSuggestions" class="placeholder-suggestions"></div>
         </div>
@@ -1331,16 +1352,23 @@
         
         <div class="input-area-wrapper-container">
             <div id="commandSuggestions" class="command-suggestions hidden"></div>
+             <div class="chat-mode-selector">
+                 <button id="commandPaletteBtn" title="Command Palette"><i class="fas fa-sliders-h"></i></button>
+                 <button id="searchModeBtn" title="Toggle Search Mode">
+                     <i class="fas fa-globe"></i>
+                     <span>Search</span>
+                 </button>
+            </div>
             <footer class="input-area">
-                <button id="uploadImageBtn" title="Upload Image"><i class="fas fa-image"></i></button>
                 <div class="chat-input-wrapper">
+                    <button id="uploadImageBtn" title="Upload Image"><i class="fas fa-image"></i></button>
                     <textarea id="chatInput" placeholder="Type a message..." rows="1"></textarea>
-                    <button id="focusModeBtn" title="Focus Mode"><i class="fas fa-expand"></i></button>
                     <button id="uploadDocumentBtnInside" title="Upload Document"><i class="fas fa-paperclip"></i></button>
+                    <button id="sendBtn" title="Send Message"><i class="fas fa-paper-plane"></i></button>
+                    <button id="focusModeBtn" title="Focus Mode" style="display: none;"><i class="fas fa-expand"></i></button>
                 </div>
-                <button id="sendBtn" title="Send Message"><i class="fas fa-paper-plane"></i></button>
             </footer>
-            <p class="disclaimer-message">Vioo AI can make mistakes, so double check its responses</p>
+            <p class="disclaimer-message">Dinz Assistance can make mistakes, so double check its responses</p>
         </div>
     </div>
     
@@ -1351,7 +1379,7 @@
     
     <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
-    <input type="file" id="imageUpload" accept="image/*" class="hidden">
+    <input type="file" id="imageUpload" accept="image/*" class="hidden" multiple>
     <input type="file" id="documentUpload" accept=".pdf,.doc,.docx,.dot,.dotx,.rtf,.hwpx,.txt,.wasm" class="hidden">
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
