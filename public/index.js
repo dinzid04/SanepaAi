@@ -336,7 +336,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function processInlineFormatting(text) {
-        let html = text;
+        const links = [];
+        const linkRegex = /\[([^\]]+)\]\((https?:\/\/[^\s\)]+)\)/g;
+
+        const textWithPlaceholders = text.replace(linkRegex, (match, linkText, url) => {
+            links.push({ text: linkText, url: url });
+            return `___LINK_${links.length - 1}___`;
+        });
+
+        let html = escapeHtml(textWithPlaceholders);
+
         commands.forEach(command => {
             const commandRegex = new RegExp(`(?<!\\S)${command.cmd.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}(?!\\S)`, 'g');
             html = html.replace(commandRegex, `<span class="command-in-message">${command.cmd}</span>`);
@@ -346,8 +355,16 @@ document.addEventListener('DOMContentLoaded', () => {
         html = html.replace(/(?<!\*)\*(?!\*)(.*?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
         html = html.replace(/~~(.*?)~~/g, '<del>$1</del>');
         html = html.replace(/`(.*?)`/g, '<code>$1</code>');
-        html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: var(--link-color); text-decoration: underline;">$1</a>');
         html = html.replace(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: var(--link-color); text-decoration: underline;">$1</a>');
+
+        links.forEach((link, i) => {
+            const placeholder = `___LINK_${i}___`;
+            const escapedText = escapeHtml(link.text);
+            const escapedUrl = escapeHtml(link.url);
+            const linkHtml = `<a href="${escapedUrl}" target="_blank" rel="noopener noreferrer" style="color: var(--link-color); text-decoration: underline;">${escapedText}</a>`;
+            html = html.replace(placeholder, linkHtml);
+        });
+
         return html;
     }
 
@@ -1429,6 +1446,7 @@ async function AI_API_Call(query, prompt, sessionId, fileObject = null, abortSig
                 }
             } else {
                 const responseText = await AI_API_Call(messageText, getDynamicPrompt(), appState.currentSessionId, null, appState.currentAbortController.signal);
+                console.log("Bot response:", responseText);
                 if (responseText.startsWith('[voice_start]')) {
                     const textToSpeak = responseText.substring('[voice_start]'.length).trim();
                     try {
