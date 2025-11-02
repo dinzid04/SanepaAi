@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
         themeToggleText: document.getElementById('themeToggleText'),
         newChatHeaderBtn: document.getElementById('newChatHeaderBtn'),
         newChatBtn: document.getElementById('newChatBtn'),
-        createImageBtn: document.getElementById('createImageBtn'),
         uploadImageBtn: document.getElementById('uploadImageBtn'),
         imageUploadInput: document.getElementById('imageUpload'),
         uploadDocumentBtnInside: document.getElementById('uploadDocumentBtnInside'),
@@ -31,6 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
         sidebarOverlay: document.getElementById('sidebarOverlay'),
         scrollToBottomBtn: document.getElementById('scrollToBottomBtn'),
         chatInputWrapper: document.querySelector('.chat-input-wrapper'),
+        actionsMenuBtn: document.getElementById('actionsMenuBtn'),
+        actionsMenu: document.getElementById('actionsMenu'),
+        createImageShortcutBtn: document.getElementById('createImageShortcutBtn'),
+        aiModelSelect: document.getElementById('aiModelSelect'),
         focusModeBtn: document.getElementById('focusModeBtn'),
         focusModeContainer: document.getElementById('focusModeContainer'),
         focusModeTextarea: document.getElementById('focusModeTextarea'),
@@ -47,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         geminiApiKey: 'AIzaSyBNM8B-3ZiuacyQ5D2B30_b_0wWE7e7N4s',
         geminiModel: 'gemini-2.0-flash',
         geminiApiUrl: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
+        nekoApiUrl: 'https://api.nekolabs.web.id/ai/gpt/4o-mini-search',
         mainApiUrl: 'https://fastrestapis.fasturl.cloud',
         secondApiUrl: 'https://api.siputzx.my.id',
         aiPersonas: {
@@ -75,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const appState = {
         currentTheme: localStorage.getItem('theme') || 'dark-mode',
+        currentModel: 'default',
         currentPersona: localStorage.getItem('aiPersona') || 'default',
         currentPreviewFileObject: null,
         currentPreviewType: null,
@@ -341,8 +346,8 @@ document.addEventListener('DOMContentLoaded', () => {
         html = html.replace(/(?<!\*)\*(?!\*)(.*?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
         html = html.replace(/~~(.*?)~~/g, '<del>$1</del>');
         html = html.replace(/`(.*?)`/g, '<code>$1</code>');
+        html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: var(--link-color); text-decoration: underline;">$1</a>');
         html = html.replace(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: var(--link-color); text-decoration: underline;">$1</a>');
-        html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: var(--link-color); text-decoration: underline;">$1</a>');
         return html;
     }
 
@@ -1220,99 +1225,113 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
 async function AI_API_Call(query, prompt, sessionId, fileObject = null, abortSignal) {
-    const apiUrl = `${config.geminiApiUrl}?key=${config.geminiApiKey}`;
-    
-    let contents = buildChatHistory();
-    
-    // Tambahkan prompt system jika contents masih kosong
-    if (contents.length === 0) {
-        contents.push({
-            role: "user",
-            parts: [{ text: getDynamicPrompt() + "\n\nUser: " + query }]
-        });
-    } else {
-        // Tambahkan query user terbaru
-        const userMessage = {
-            role: "user",
-            parts: [{ text: query }]
-        };
-        
-        // Handle file upload
-        if (fileObject) {
-            if (fileObject.type.startsWith('image/')) {
-                try {
-                    const base64Image = await fileToBase64(fileObject);
-                    const base64Data = base64Image.split(',')[1];
-                    userMessage.parts.push({
-                        inline_data: {
-                            mime_type: fileObject.type,
-                            data: base64Data
-                        }
-                    });
-                } catch (error) {
-                    console.error("Error processing image:", error);
-                    userMessage.parts[0].text += `\n[Image: ${fileObject.name}]`;
-                }
-            } else if (fileObject.type === 'application/pdf') {
-                try {
-                    const base64File = await fileToBase64(fileObject);
-                    const base64Data = base64File.split(',')[1];
-                    userMessage.parts.push({
-                        inline_data: {
-                            mime_type: 'application/pdf',
-                            data: base64Data
-                        }
-                    });
-                } catch (error) {
-                    console.error("Error processing PDF:", error);
-                    userMessage.parts[0].text += `\n[PDF: ${fileObject.name}]`;
-                }
-            } else {
-                userMessage.parts[0].text += `\n[File: ${fileObject.name}]`;
-            }
-        }
-        
-        contents.push(userMessage);
-    }
-    
-    const requestBody = {
-        contents: contents,
-        generationConfig: {
-            temperature: 0.7,
-            topK: 40,
-            topP: 0.95,
-            maxOutputTokens: 8192,
-        }
-    };
-    
-    try {
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestBody),
-            signal: abortSignal
-        });
-        
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error?.message || `API request failed with status ${response.status}`);
-        }
-        
-        const result = await response.json();
-        
-        if (result.candidates && result.candidates[0] && result.candidates[0].content) {
-            return result.candidates[0].content.parts[0].text;
+    if (appState.currentModel === 'default') {
+        const apiUrl = `${config.geminiApiUrl}?key=${config.geminiApiKey}`;
+        let contents = buildChatHistory();
+        if (contents.length === 0) {
+            contents.push({
+                role: "user",
+                parts: [{ text: getDynamicPrompt() + "\n\nUser: " + query }]
+            });
         } else {
-            throw new Error('Invalid response format from Gemini API');
+            const userMessage = {
+                role: "user",
+                parts: [{ text: query }]
+            };
+            if (fileObject) {
+                if (fileObject.type.startsWith('image/')) {
+                    try {
+                        const base64Image = await fileToBase64(fileObject);
+                        const base64Data = base64Image.split(',')[1];
+                        userMessage.parts.push({
+                            inline_data: {
+                                mime_type: fileObject.type,
+                                data: base64Data
+                            }
+                        });
+                    } catch (error) {
+                        console.error("Error processing image:", error);
+                        userMessage.parts[0].text += `\n[Image: ${fileObject.name}]`;
+                    }
+                } else if (fileObject.type === 'application/pdf') {
+                    try {
+                        const base64File = await fileToBase64(fileObject);
+                        const base64Data = base64File.split(',')[1];
+                        userMessage.parts.push({
+                            inline_data: {
+                                mime_type: 'application/pdf',
+                                data: base64Data
+                            }
+                        });
+                    } catch (error) {
+                        console.error("Error processing PDF:", error);
+                        userMessage.parts[0].text += `\n[PDF: ${fileObject.name}]`;
+                    }
+                } else {
+                    userMessage.parts[0].text += `\n[File: ${fileObject.name}]`;
+                }
+            }
+            contents.push(userMessage);
         }
-    } catch (err) {
-        if (err.name === 'AbortError') {
-            throw err;
+        const requestBody = {
+            contents: contents,
+            generationConfig: {
+                temperature: 0.7,
+                topK: 40,
+                topP: 0.95,
+                maxOutputTokens: 8192,
+            }
+        };
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+                signal: abortSignal
+            });
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error?.message || `API request failed with status ${response.status}`);
+            }
+            const result = await response.json();
+            if (result.candidates && result.candidates[0] && result.candidates[0].content) {
+                return result.candidates[0].content.parts[0].text;
+            } else {
+                throw new Error('Invalid response format from Gemini API');
+            }
+        } catch (err) {
+            if (err.name === 'AbortError') {
+                throw err;
+            }
+            console.error("Gemini API Error:", err);
+            throw new Error(err.message || `Failed to fetch from ${config.aiName} API`);
         }
-        console.error("Gemini API Error:", err);
-        throw new Error(err.message || `Failed to fetch from ${config.aiName} API`);
+    } else {
+        const apiUrl = `${config.nekoApiUrl}?text=${encodeURIComponent(query)}&systemPrompt=${encodeURIComponent(getDynamicPrompt())}&sessionId=${sessionId}`;
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'GET',
+                signal: abortSignal
+            });
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error?.message || `API request failed with status ${response.status}`);
+            }
+            const result = await response.json();
+            if (result.success && result.result) {
+                return result.result;
+            } else {
+                throw new Error('Invalid response format from Neko API');
+            }
+        } catch (err) {
+            if (err.name === 'AbortError') {
+                throw err;
+            }
+            console.error("Neko API Error:", err);
+            throw new Error(err.message || `Failed to fetch from Neko API`);
+        }
     }
 }
 
@@ -1621,6 +1640,21 @@ async function AI_API_Call(query, prompt, sessionId, fileObject = null, abortSig
     }
 
     function initializeEventListeners() {
+        domElements.actionsMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            domElements.actionsMenu.classList.toggle('hidden');
+        });
+
+        domElements.createImageShortcutBtn.addEventListener('click', () => {
+            domElements.chatInput.value = '/create-image ';
+            domElements.chatInput.focus();
+            domElements.actionsMenu.classList.add('hidden');
+        });
+
+        domElements.aiModelSelect.addEventListener('change', (e) => {
+            appState.currentModel = e.target.value;
+            domElements.actionsMenu.classList.add('hidden');
+        });
         domElements.themeToggleBtn.addEventListener('click', toggleTheme);
         domElements.hamburgerBtn.addEventListener('click', toggleSidebar);
         domElements.sidebarOverlay.addEventListener('click', toggleSidebar);
@@ -1677,10 +1711,6 @@ async function AI_API_Call(query, prompt, sessionId, fileObject = null, abortSig
             if (!appState.isAIResponding) {
                  domElements.sendBtn.disabled = !(domElements.chatInput.value.trim() || appState.currentPreviewFileObject);
             }
-        });
-        domElements.createImageBtn.addEventListener('click', () => {
-            domElements.chatInput.value = '/create-image ';
-            domElements.chatInput.focus();
         });
         domElements.uploadImageBtn.addEventListener('click', () => domElements.imageUploadInput.click());
         domElements.imageUploadInput.addEventListener('change', (e) => handleFileUpload(e, 'image'));
