@@ -1,3 +1,4 @@
+
 // MAU DI PAKE ?
 // GAK PAPA.. TAPI KASIH AUTHOR DAN SUMBER ASLI NYA !
 
@@ -335,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function processInlineFormatting(text) {
-        let html = escapeHtml(text);
+        let html = text;
         commands.forEach(command => {
             const commandRegex = new RegExp(`(?<!\\S)${command.cmd.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}(?!\\S)`, 'g');
             html = html.replace(commandRegex, `<span class="command-in-message">${command.cmd}</span>`);
@@ -1654,6 +1655,12 @@ async function AI_API_Call(query, prompt, sessionId, fileObject = null, abortSig
             appState.currentModel = e.target.value;
             domElements.actionsMenu.classList.add('hidden');
         });
+
+        domElements.uploadImageBtn.addEventListener('click', () => {
+            domElements.imageUploadInput.click();
+            domElements.actionsMenu.classList.add('hidden');
+        });
+
         domElements.themeToggleBtn.addEventListener('click', toggleTheme);
         domElements.hamburgerBtn.addEventListener('click', toggleSidebar);
         domElements.sidebarOverlay.addEventListener('click', toggleSidebar);
@@ -1711,7 +1718,6 @@ async function AI_API_Call(query, prompt, sessionId, fileObject = null, abortSig
                  domElements.sendBtn.disabled = !(domElements.chatInput.value.trim() || appState.currentPreviewFileObject);
             }
         });
-        domElements.uploadImageBtn.addEventListener('click', () => domElements.imageUploadInput.click());
         domElements.imageUploadInput.addEventListener('change', (e) => handleFileUpload(e, 'image'));
         domElements.uploadDocumentBtnInside.addEventListener('click', () => domElements.documentUploadInput.click());
         domElements.documentUploadInput.addEventListener('change', (e) => handleFileUpload(e, 'document'));
