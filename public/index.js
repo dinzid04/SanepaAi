@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         themeToggleText: document.getElementById('themeToggleText'),
         newChatHeaderBtn: document.getElementById('newChatHeaderBtn'),
         newChatBtn: document.getElementById('newChatBtn'),
+        createImageBtn: document.getElementById('createImageBtn'),
         uploadImageBtn: document.getElementById('uploadImageBtn'),
         imageUploadInput: document.getElementById('imageUpload'),
         uploadDocumentBtnInside: document.getElementById('uploadDocumentBtnInside'),
@@ -341,6 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
         html = html.replace(/~~(.*?)~~/g, '<del>$1</del>');
         html = html.replace(/`(.*?)`/g, '<code>$1</code>');
         html = html.replace(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: var(--link-color); text-decoration: underline;">$1</a>');
+        html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: var(--link-color); text-decoration: underline;">$1</a>');
         return html;
     }
 
@@ -1675,6 +1677,10 @@ async function AI_API_Call(query, prompt, sessionId, fileObject = null, abortSig
             if (!appState.isAIResponding) {
                  domElements.sendBtn.disabled = !(domElements.chatInput.value.trim() || appState.currentPreviewFileObject);
             }
+        });
+        domElements.createImageBtn.addEventListener('click', () => {
+            domElements.chatInput.value = '/create-image ';
+            domElements.chatInput.focus();
         });
         domElements.uploadImageBtn.addEventListener('click', () => domElements.imageUploadInput.click());
         domElements.imageUploadInput.addEventListener('change', (e) => handleFileUpload(e, 'image'));
