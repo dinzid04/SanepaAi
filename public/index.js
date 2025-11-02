@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         actionsMenuBtn: document.getElementById('actionsMenuBtn'),
         actionsMenu: document.getElementById('actionsMenu'),
         createImageShortcutBtn: document.getElementById('createImageShortcutBtn'),
+        createImageBtn: document.getElementById('createImageBtn'),
         aiModelSelect: document.getElementById('aiModelSelect'),
         focusModeBtn: document.getElementById('focusModeBtn'),
         focusModeContainer: document.getElementById('focusModeContainer'),
@@ -47,9 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const config = {
         aiName: 'Vioo AI',
-        geminiApiKey: 'AIzaSyBNM8B-3ZiuacyQ5D2B30_b_0wWE7e7N4s',
         geminiModel: 'gemini-2.0-flash',
-        geminiApiUrl: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
+        geminiApiUrl: '/api/gemini',
         nekoApiUrl: 'https://api.nekolabs.web.id/ai/gpt/4o-mini-search',
         mainApiUrl: 'https://fastrestapis.fasturl.cloud',
         secondApiUrl: 'https://api.siputzx.my.id',
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
             second: '2-digit',
             timeZoneName: 'short'
         });
-        const context = `Real-time Context: Your internal clock shows the current date and time is: ${timeString}. You MUST use this information when asked about the current day, date or time. Treat this as your absolute present moment.\n\n` + "Formatting Rules: For any code examples (JavaScript, Java, etc.), you MUST enclose the entire code block within triple backticks (```) followed by the language name, like so: ```language\ncode here\n```. This is a non-negotiable rule for proper rendering. Use Markdown for lists, bolding, and italics where it enhances readability." + "Special Commands: If asked to send your voice or use your voice, you MUST reply ONLY in the format: [voice_start] followed by the text to be spoken. For example: [voice_start]Hello, this is my voice, how may I assist you today?";
+    const context = `Real-time Context: Your internal clock shows the current date and time is: ${timeString}. You MUST use this information when asked about the current day, date or time. Treat this as your absolute present moment.\n\n` + "Formatting Rules: For any code examples (JavaScript, Java, etc.), you MUST enclose the entire code block within triple backticks (```) followed by the language name, like so: ```language\ncode here\n```. This is a non-negotiable rule for proper rendering. Use Markdown for lists, bolding, and italics where it enhances readability.\n" + "**News Source Formatting:** This is a strict, non-negotiable rule. When providing news with sources, you MUST follow this format: First, provide the news summaries. After ALL summaries are complete, add a new section titled EXACTLY `Sumber berita:`. Below this title, you MUST provide a bulleted list. Each item in the list MUST ONLY contain the source name formatted as a Markdown hyperlink. For example: `* [ANTARA News](https://www.antaranews.com/example)`. DO NOT write the URL as plain text. The `[Link Text](URL)` format is MANDATORY. This is an absolute instruction.\n" + "Special Commands: If asked to send your voice or use your voice, you MUST reply ONLY in the format: [voice_start] followed by the text to be spoken. For example: [voice_start]Hello, this is my voice, how may I assist you today?";
         const selectedPersonaPrompt = (config.aiPersonas[appState.currentPersona] || config.aiPersonas['default']).prompt;
         return `${selectedPersonaPrompt}\n\n${context}`;
     }
@@ -1226,7 +1226,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function AI_API_Call(query, prompt, sessionId, fileObject = null, abortSignal) {
     if (appState.currentModel === 'default') {
-        const apiUrl = `${config.geminiApiUrl}?key=${config.geminiApiKey}`;
+        const apiUrl = config.geminiApiUrl;
         let contents = buildChatHistory();
         if (contents.length === 0) {
             contents.push({
@@ -1649,6 +1649,11 @@ async function AI_API_Call(query, prompt, sessionId, fileObject = null, abortSig
             domElements.chatInput.value = '/create-image ';
             domElements.chatInput.focus();
             domElements.actionsMenu.classList.add('hidden');
+        });
+
+        domElements.createImageBtn.addEventListener('click', () => {
+            domElements.chatInput.value = '/create-image ';
+            domElements.chatInput.focus();
         });
 
         domElements.aiModelSelect.addEventListener('change', (e) => {
