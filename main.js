@@ -1,10 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const axios = require('axios');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const GEMINI_API_KEY = 'AIzaSyBNM8B-3ZiuacyQ5D2B30_b_0wWE7e7N4s';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));

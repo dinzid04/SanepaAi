@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
         actionsMenuBtn: document.getElementById('actionsMenuBtn'),
         actionsMenu: document.getElementById('actionsMenu'),
         createImageShortcutBtn: document.getElementById('createImageShortcutBtn'),
-        createImageBtn: document.getElementById('createImageBtn'),
         aiModelSelect: document.getElementById('aiModelSelect'),
         focusModeBtn: document.getElementById('focusModeBtn'),
         focusModeContainer: document.getElementById('focusModeContainer'),
@@ -1649,11 +1648,6 @@ async function AI_API_Call(query, prompt, sessionId, fileObject = null, abortSig
             domElements.chatInput.value = '/create-image ';
             domElements.chatInput.focus();
             domElements.actionsMenu.classList.add('hidden');
-        });
-
-        domElements.createImageBtn.addEventListener('click', () => {
-            domElements.chatInput.value = '/create-image ';
-            domElements.chatInput.focus();
         });
 
         domElements.aiModelSelect.addEventListener('change', (e) => {
