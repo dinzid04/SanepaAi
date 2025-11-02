@@ -1309,7 +1309,7 @@ async function AI_API_Call(query, prompt, sessionId, fileObject = null, abortSig
             throw new Error(err.message || `Failed to fetch from ${config.aiName} API`);
         }
     } else {
-        const apiUrl = `${config.nekoApiUrl}?text=${encodeURIComponent(query)}&systemPrompt=${encodeURIComponent(getDynamicPrompt())}&sessionId=${sessionId}`;
+        const apiUrl = `/api/neko?text=${encodeURIComponent(query)}&systemPrompt=${encodeURIComponent(getDynamicPrompt())}&sessionId=${sessionId}`;
         try {
             const response = await fetch(apiUrl, {
                 method: 'GET',
